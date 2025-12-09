@@ -18,6 +18,11 @@ const amountInput = document.getElementById("amountInput");
 const typeInput = document.getElementById("typeInput");
 const addBtn = document.getElementById("addBtn");
 
+const searchInput = document.getElementById("searchInput");
+
+
+
+
 
 // ✅ You will implement these
  function filterByType(data, type) {
@@ -66,10 +71,11 @@ function getSummary(data) {
 function renderTable(data) {
   tableBody.innerHTML = "";
 
-  data.forEach(tr => {
+  data.forEach((tr, index )=> {
     const row = document.createElement("tr");
 
     row.innerHTML = `
+      <td>${index + 1}</td>
       <td>${tr.date}</td>
       <td>${tr.type}</td>
       <td>${tr.amount}</td>
@@ -87,20 +93,67 @@ function renderTable(data) {
   });
 }
 
+// Debounce Lag Free function
+
+function debounce (fn, delay = 400 ){
+
+  let timeout;
+
+  return (...args)=> {
+    clearTimeout (timeout);
+    timeout = setTimeout (()=>{
+      fn.apply(this, args);
+    }, delay)
+    
+  }
+}
+
+const smoothSearch = debounce (renderDashboard, 300);
+
+// short Funciton
+
+function sortByAmount (data, order) {
+if(order === "asc") return data;
+
+return [...data].sort((a,b ) =>{
+  
+if(order === "asc") return a.amount - b.amount;
+if(order === "desc") return b.amount - a.amount;
+
+})
+
+}
+
+
+
 
 
 
 function renderDashboard() {
   const type = filterType.value;
   const month = filterMonth.value;
-  
+  const search = searchInput.value.toLowerCase();
+   const sortAmount = document.getElementById("sortAmount").value;
+
   
   
   let data = filterByType(transactions, type);
   data = filterByMonth(data, month);
   
+  data = data.filter(tr =>
+    tr.date.toLowerCase().includes(search) ||
+    tr.type.toLowerCase().includes(search) 
+  )
+  //sort
+data= sortByAmount(data, sortAmount);
+
+
+
+
+
   const total = calculateTotal(data);
   const summary = getSummary(data);
+
   incomeEl.textContent = summary.income;  
   expenseEl.textContent = summary.expense;
   balanceEl.textContent = summary.income - summary.expense;
@@ -111,6 +164,11 @@ function renderDashboard() {
 
 
 }
+
+
+
+
+
 // Edit
 let editId = null;
 
@@ -180,6 +238,7 @@ renderDashboard();
 filterType.addEventListener("change", renderDashboard);
 filterMonth.addEventListener("change", renderDashboard);
 addBtn.addEventListener("click", addTransaction);
-
+searchInput.addEventListener("input", smoothSearch);
+sortAmount.addEventListener("change", renderDashboard);
 // Initial Load
 renderDashboard();

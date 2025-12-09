@@ -96,6 +96,25 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-6">
+      <input 
+  type="text" 
+  id="searchInput" 
+  class="form-control mb-2"
+  placeholder="Search by amount, type, date..."
+>
+    </div>
+    <div class="col-md-6">
+      <select id="sortAmount" class="form-select">
+  <option value="none">Sort By Amount</option>
+  <option value="asc">Low → High</option>
+  <option value="desc">High → Low</option>
+</select>
+
+    </div>
+  </div>
+
 
   <!-- 🔹 FILTER SECTION -->
   <div class="row mb-3">
@@ -123,9 +142,10 @@
         <table class="table table-bordered">
           <thead class="table-dark">
             <tr>
+              <th>ID</th>
               <th>Date</th>
-              <th>Amount</th>
               <th>Type</th>
+              <th>Amount</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -140,6 +160,6 @@
 </div>
 
 <script src="./assets/js/script.js"></script>
-<script src="./assets/js/function.js"></script>
+<!-- <script src="./assets/js/function.js"></script> -->
 </body>
 </html>
