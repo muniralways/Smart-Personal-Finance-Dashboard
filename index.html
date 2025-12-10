@@ -134,32 +134,41 @@
       </select>
     </div>
   </div>
-
+   
   <!-- 🔹 TRANSACTION TABLE -->
   <div class="row">
     <div class="col-md-12">
       <div class="card card-box p-3">
         <table class="table table-bordered">
+    
+  
           <thead class="table-dark">
             <tr>
-              <th>ID</th>
+      <th>ID</th>
               <th>Date</th>
               <th>Type</th>
               <th>Amount</th>
               <th>Action</th>
             </tr>
+
           </thead>
           <tbody id="tableBody">
+                         
+        
             <!-- JS will render rows here -->
           </tbody>
+
         </table>
+          <div id="noResult" class="alert alert-warning text-center ">
+  ❌ Data Not  Found
+</div>
       </div>
     </div>
   </div>
 
 </div>
 
-<script src="./assets/js/script.js"></script>
+<script src="./assets/js/script.js " type="module"></script>
 <!-- <script src="./assets/js/function.js"></script> -->
 </body>
 </html>

@@ -20,6 +20,8 @@ const addBtn = document.getElementById("addBtn");
 
 const searchInput = document.getElementById("searchInput");
 
+// data not found element
+const noResult = document.getElementById("noResult");
 
 
 
@@ -48,6 +50,12 @@ localStorage.setItem("transactions", JSON.stringify(transactions));
 
 renderDashboard();
 
+console.log(id);
+
+
+
+
+
 
 }
 
@@ -71,6 +79,12 @@ function getSummary(data) {
 function renderTable(data) {
   tableBody.innerHTML = "";
 
+  if(data.length === 0 ){
+    noResult.classList.remove("d-none")
+  }else{
+    noResult.classList.add("d-none")
+  }
+
   data.forEach((tr, index )=> {
     const row = document.createElement("tr");
 
@@ -80,19 +94,39 @@ function renderTable(data) {
       <td>${tr.type}</td>
       <td>${tr.amount}</td>
       <td>
-        <button class="btn btn-warning btn-sm" onclick="editTransaction('${tr.id}')">
+        <button class=" edit-btn btn btn-warning btn-sm" " data-id ='${tr.id}'>
           Edit
         </button>
-        <button class="btn btn-danger btn-sm" onclick="deleteTransaction('${tr.id}')">
+        <button class="delete-btn btn btn-danger btn-sm" data-id ='${tr.id}'>
           Delete
         </button>
       </td>
     `;
 
     tableBody.appendChild(row);
-  });
-}
 
+
+
+  });
+
+  // Attach Event Listeners to Delete Buttons
+
+document.querySelectorAll(".delete-btn").forEach(btn =>{
+  btn.addEventListener("click", ()=> {
+    deleteTransaction(btn.dataset.id)
+  })
+})
+
+// Edit buttons event 
+
+document.querySelectorAll(".edit-btn").forEach( btn =>{
+  btn.addEventListener("click", ()=> {
+    editTransaction(btn.dataset.id)
+  })
+})
+
+}
+window.deleteTransaction = deleteTransaction;
 // Debounce Lag Free function
 
 function debounce (fn, delay = 400 ){
