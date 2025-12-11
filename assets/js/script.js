@@ -17,7 +17,7 @@ const dateInput = document.getElementById("dateInput");
 const amountInput = document.getElementById("amountInput");
 const typeInput = document.getElementById("typeInput");
 const addBtn = document.getElementById("addBtn");
-
+const gategoryInput = document.getElementById("categoryInput");
 const searchInput = document.getElementById("searchInput");
 
 // data not found element
@@ -103,6 +103,7 @@ function renderTable(data) {
       <td>${index + 1}</td>
       <td>${tr.date}</td>
       <td>${tr.type}</td>
+      <td>${tr.gategory}</td>
       <td>${tr.amount}</td>
       <td>
         <button class=" edit-btn btn btn-warning btn-sm" data-id ='${tr.id}'>
@@ -260,7 +261,8 @@ const newTransaction = {
   id,
   date,
   amount,
-  type
+  type,
+  gategory: gategoryInput.value
 }
 transactions.push (newTransaction)
 
