@@ -1,18 +1,18 @@
-// Initial Data
+//get data from local storage
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [] ;
 
-// DOM
+
 const filterType = document.getElementById("filter-type");
 const filterMonth = document.getElementById("filter-month");
 const tableBody = document.getElementById("tableBody");
 
-// Summary DOM
+
 const incomeEl = document.getElementById("income");
 const expenseEl = document.getElementById("expense");
 const balanceEl = document.getElementById("balance");
 const totalEl = document.getElementById("total");
 
-// Input DOM
+
 const dateInput = document.getElementById("dateInput");
 const amountInput = document.getElementById("amountInput");
 const typeInput = document.getElementById("typeInput");
@@ -25,8 +25,8 @@ const noResult = document.getElementById("noResult");
 
 document.addEventListener("DOMContentLoaded", () => {
 
-// ⬇️ Your entire JS code here
-// Initial Data
+
+
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
 
 // ... all functions ...
@@ -36,24 +36,30 @@ renderDashboard();
 });
 
 
+// filter functions
 
-// ✅ You will implement these
  function filterByType(data, type) {
  if( type  === "all") return data;
  return data.filter(tr => tr.type === type)
 }
 
+
+//month filter
 function filterByMonth(data, month) {
 if( month === "all") return data;
 return data.filter (tr => tr.date.startsWith(month))
 
 }
+
+// total  cal
 function calculateTotal(data) {
   let total = 0;
   data.forEach(tr => total += tr.amount)
 return total;
 }
 
+
+// delte funcion
 function deleteTransaction(id) {
 transactions = transactions.filter(tr => String(tr.id) !== String(id));
 
@@ -65,11 +71,10 @@ console.log(id);
 
 
 
-
-
-
 }
 
+
+// summmay
 function getSummary(data) {
   let income = 0;
   let expense = 0;
@@ -121,7 +126,7 @@ function renderTable(data) {
 
   });
 
-  // Attach Event Listeners to Delete Buttons
+  // Delete Buttons
 
 document.querySelectorAll(".delete-btn").forEach(btn =>{
   btn.addEventListener("click", ()=> {
@@ -139,7 +144,9 @@ document.querySelectorAll(".edit-btn").forEach( btn =>{
 
 }
 window.deleteTransaction = deleteTransaction;
-// Debounce Lag Free function
+
+
+//leg free funtion
 
 function debounce (fn, delay = 400 ){
 
@@ -286,5 +293,5 @@ filterMonth.addEventListener("change", renderDashboard);
 addBtn.addEventListener("click", addTransaction);
 searchInput.addEventListener("input", smoothSearch);
 sortAmount.addEventListener("change", renderDashboard);
-// Initial Load
+// Load
 renderDashboard();
