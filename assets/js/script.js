@@ -23,6 +23,17 @@ const searchInput = document.getElementById("searchInput");
 // data not found element
 const noResult = document.getElementById("noResult");
 
+document.addEventListener("DOMContentLoaded", () => {
+
+// ⬇️ Your entire JS code here
+// Initial Data
+let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+
+// ... all functions ...
+
+renderDashboard();
+
+});
 
 
 
@@ -79,7 +90,7 @@ function getSummary(data) {
 function renderTable(data) {
   tableBody.innerHTML = "";
 
-  if(data.length === 0 ){
+  if(data.length === 0  && searchInput.value.trim().length  > 0){
     noResult.classList.remove("d-none")
   }else{
     noResult.classList.add("d-none")
@@ -94,7 +105,7 @@ function renderTable(data) {
       <td>${tr.type}</td>
       <td>${tr.amount}</td>
       <td>
-        <button class=" edit-btn btn btn-warning btn-sm" " data-id ='${tr.id}'>
+        <button class=" edit-btn btn btn-warning btn-sm" data-id ='${tr.id}'>
           Edit
         </button>
         <button class="delete-btn btn btn-danger btn-sm" data-id ='${tr.id}'>
@@ -207,7 +218,8 @@ data= sortByAmount(data, sortAmount);
 let editId = null;
 
 function editTransaction(id) {
-    const tr = transactions.find( tr => tr.id === id)
+    const tr = transactions.find(tr => String(tr.id) === String(id));
+
     dateInput.value = tr.date
     amountInput.value = tr.amount
     typeInput.value = tr.type
@@ -224,7 +236,7 @@ function addTransaction(e) {
   const date = dateInput.value;
   const amount = Number(amountInput.value);
   const type = typeInput.value;
-  const id =  'tr' + new Date().getTime() + Math.random(16).toString(36).slice(1,1)
+  const id =  'tr' + new Date().getTime() + Math.random().toString(36).slice(2)
 
 if(!date || !amount || !type ){
   alert ("Please fill all fields")
@@ -232,14 +244,12 @@ if(!date || !amount || !type ){
 }
 
 if(editId){
-    transactions = transactions.map(tr => {
-        if(tr.id === editId){
-        tr.id === editId ? { ... tr , date, amount, type } : tr;
-       return { ... tr , date, amount, type };
-        }
-        return tr
-      
-    })
+   transactions = transactions.map(tr => 
+    String(tr.id) === String(editId)
+        ? { ...tr, date, amount, type }
+        : tr
+);
+
      renderDashboard();
   editId = null;
     addBtn.textContent = "Add";
