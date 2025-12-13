@@ -1,5 +1,8 @@
 //get data from local storage
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [] ;
+let category = JSON.parse(localStorage.getItem("category")) || [ ] ;
+
+
 
 
 const filterType = document.getElementById("filter-type");
@@ -19,6 +22,14 @@ const typeInput = document.getElementById("typeInput");
 const addBtn = document.getElementById("addBtn");
 const gategoryInput = document.getElementById("categoryInput");
 const searchInput = document.getElementById("searchInput");
+
+// category table body
+const Cat_tableBody = document.getElementById("Cat_tableBody");
+
+// category 
+
+  const categoryFromInput = document.getElementById('categoryInput-modal');
+  const getCategoryBtn = document.getElementById('getCategoryBtn');
 
 // data not found element
 const noResult = document.getElementById("noResult");
@@ -67,7 +78,6 @@ localStorage.setItem("transactions", JSON.stringify(transactions));
 
 renderDashboard();
 
-console.log(id);
 
 
 
@@ -213,7 +223,7 @@ data= sortByAmount(data, sortAmount);
   totalEl.textContent = total;
   
   renderTable(data);
-
+getCategory();
 
 
 }
@@ -235,8 +245,90 @@ function editTransaction(id) {
 editId = id
     addBtn.textContent = "update"
 
+
 }
 window.editTransaction = editTransaction;
+
+
+// gategory input
+
+function addCategory (e) {
+
+let  gateval = categoryFromInput.value;
+
+const id = 'cat' + new Date ().getTime() + Math.random().toString(36).slice(2)
+
+if(!gateval){
+  alert ("Please enter category")
+}
+
+
+
+const newCategory = {
+  id, 
+  category: gateval
+}
+
+category.push (newCategory)
+localStorage.setItem("category", JSON.stringify(category))
+
+
+categoryFromInput.value = "";
+  randercategory(category);
+  getCategory();
+}
+
+
+// category load on table
+
+function randercategory (data) {
+  Cat_tableBody.innerHTML = "";
+
+
+  data.forEach((cat, index ) => {
+ const row = document.createElement("tr")
+
+row.innerHTML = `
+<td>${index + 1}</td>
+<td>${cat.category}</td>
+
+<td>
+        <button class=" edit-btn btn btn-warning btn-sm" '>
+          Edit
+        </button>
+        <button class="delete-btn btn btn-danger btn-sm" '>
+          Delete
+        </button>
+      </td>
+
+
+
+`
+console.log(cat.gategory);
+
+Cat_tableBody.appendChild(row);
+  })
+
+  
+}
+
+
+// get category from local storage
+
+function getCategory () {
+  gategoryInput.innerHTML = `<option value="">Select Category</option>`;
+
+  category.forEach(cat => {
+    const option = document.createElement("option");
+    option.value = cat.category;
+    option.textContent = cat.category;
+    gategoryInput.appendChild(option);
+  });
+}
+
+
+
+// add transaction
 function addTransaction(e) {
   
 
@@ -291,6 +383,13 @@ renderDashboard();
 filterType.addEventListener("change", renderDashboard);
 filterMonth.addEventListener("change", renderDashboard);
 addBtn.addEventListener("click", addTransaction);
+
+
+// gategory i
+getCategoryBtn.addEventListener("click", addCategory);
+
+
+
 searchInput.addEventListener("input", smoothSearch);
 sortAmount.addEventListener("change", renderDashboard);
 // Load
