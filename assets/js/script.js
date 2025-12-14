@@ -251,6 +251,7 @@ editId = id
 window.editTransaction = editTransaction;
 
 
+
 // gategory input
 
 function addCategory (e) {
@@ -284,6 +285,36 @@ categoryFromInput.value = "";
   getCategory();
 }
 
+// category delete
+
+function deleteCategory (id) {
+ category = category.filter(cat => String(cat.id) !== String(id));
+
+  localStorage.setItem("category", JSON.stringify(category))
+  randercategory();
+  getCategory();
+
+
+
+}
+
+// delete event 
+
+Cat_tableBody.addEventListener("click", e => {
+  if(e.target.classList.contains("delete-cat")){
+    deleteCategory(e.target.dataset.id);
+  }
+});
+
+
+
+
+// category edit
+
+let editCategoryId = null;
+
+
+
 
 // category load on table
 
@@ -299,10 +330,10 @@ row.innerHTML = `
 <td>${cat.category}</td>
 
 <td>
-        <button class=" edit-btn btn btn-warning btn-sm" '>
+        <button class=" edit-btn btn btn-warning btn-sm">
           Edit
         </button>
-        <button class="delete-btn btn btn-danger btn-sm" '>
+        <button class="delete-btn btn btn-danger btn-sm delete-cat"  data-id=${cat.id}>
           Delete
         </button>
       </td>
@@ -385,11 +416,7 @@ renderDashboard();
 
 }
 
-// category delete
 
-function deleteCategory (id) {
-  
-}
 
 
 // Events
