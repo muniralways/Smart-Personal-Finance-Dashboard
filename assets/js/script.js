@@ -1,6 +1,7 @@
 //get data from local storage
+let category = JSON.parse(localStorage.getItem("category")) || [ ];
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [] ;
-let category = JSON.parse(localStorage.getItem("category")) || [ ] ;
+ ;
 
 
 
@@ -22,7 +23,7 @@ const typeInput = document.getElementById("typeInput");
 const addBtn = document.getElementById("addBtn");
 const gategoryInput = document.getElementById("categoryInput");
 const searchInput = document.getElementById("searchInput");
-
+const modalbtn_renader = document.getElementById("modalbtn_renader")
 // category table body
 const Cat_tableBody = document.getElementById("Cat_tableBody");
 
@@ -38,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
 
 // ... all functions ...
 
@@ -223,7 +223,8 @@ data= sortByAmount(data, sortAmount);
   totalEl.textContent = total;
   
   renderTable(data);
-getCategory();
+  getCategory();
+  randercategory();
 
 
 }
@@ -264,24 +265,29 @@ if(!gateval){
 
 
 
+
 const newCategory = {
   id, 
   category: gateval
 }
 
-category.push (newCategory)
+category.push (newCategory);
+
 localStorage.setItem("category", JSON.stringify(category))
 
 
 categoryFromInput.value = "";
+
   randercategory(category);
+
+ 
   getCategory();
 }
 
 
 // category load on table
 
-function randercategory (data) {
+function randercategory (data = category) {
   Cat_tableBody.innerHTML = "";
 
 
@@ -336,6 +342,7 @@ function addTransaction(e) {
   const date = dateInput.value;
   const amount = Number(amountInput.value);
   const type = typeInput.value;
+  const gategory = gategoryInput.value
   const id =  'tr' + new Date().getTime() + Math.random().toString(36).slice(2)
 
 if(!date || !amount || !type ){
@@ -346,7 +353,7 @@ if(!date || !amount || !type ){
 if(editId){
    transactions = transactions.map(tr => 
     String(tr.id) === String(editId)
-        ? { ...tr, date, amount, type }
+        ? { ...tr, date, amount, type, gategory }
         : tr
 );
 
@@ -378,6 +385,12 @@ renderDashboard();
 
 }
 
+// category delete
+
+function deleteCategory (id) {
+  
+}
+
 
 // Events
 filterType.addEventListener("change", renderDashboard);
@@ -394,3 +407,4 @@ searchInput.addEventListener("input", smoothSearch);
 sortAmount.addEventListener("change", renderDashboard);
 // Load
 renderDashboard();
+

@@ -98,7 +98,7 @@
     </select>
 
    
-  <button type="button" class="btn btn-success"
+  <button id="modalbtn_renader" type="button" class="btn btn-success"
         data-bs-toggle="modal"
         data-bs-target="#gategoryModal">
   +
@@ -201,8 +201,9 @@
         <h5 class="modal-title">Add Category</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-
-      <div class="modal-body">
+<div class="row">
+  <div class="col-md-8">
+     <div class="modal-body">
           <input 
   type="text" 
   id="categoryInput-modal" 
@@ -210,6 +211,13 @@
   placeholder="Add Category"
 >
       </div>
+  </div>
+  <div class="col-md-4">
+            <button id="getCategoryBtn" type="button" class="btn btn-primary mt-3">Add</button>
+
+  </div>
+</div>
+     
       <table class="table table-bordered">
     
   
@@ -222,19 +230,14 @@
             </tr>
 
           </thead>
-          <tbody id="Cat_tableBody">
+          <tbody class="p-2" id="Cat_tableBody">
                          
         
             <!-- JS will render rows here -->
           </tbody>
 
         </table>
-      <div class="modal-footer">
-
-        <button id="getCategoryBtn" type="button" class="btn btn-primary">Save </button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-      </div>
+      
 
     </div>
   </div>
