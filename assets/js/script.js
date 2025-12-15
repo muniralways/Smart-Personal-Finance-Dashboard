@@ -253,36 +253,65 @@ window.editTransaction = editTransaction;
 
 
 // gategory input
+let editCategoryId = null;
+let oldCategoryName = null;
+
 
 function addCategory (e) {
 
-let  gateval = categoryFromInput.value;
+let  gateval = categoryFromInput.value.trim();
 
 const id = 'cat' + new Date ().getTime() + Math.random().toString(36).slice(2)
 
 if(!gateval){
   alert ("Please enter category")
+  return
 }
 
 
+if(editCategoryId){
+ 
+  category = category.map(cat =>
+  cat.id === editCategoryId
+    ? { ...cat, category: gateval }
+    : cat
+);
 
+// transaction category auto update
+
+transactions = transactions.map(tr => {
+  tr.gategory === oldCategoryName ? {... tr, category : gateval} : tr
+})
+
+  editCategoryId = null;
+oldCategoryName = ""
+  getCategoryBtn.textContent = "Add"
+
+}else{
 
 const newCategory = {
+
   id, 
   category: gateval
 }
-
 category.push (newCategory);
 
-localStorage.setItem("category", JSON.stringify(category))
+}
+randercategory();
 
+
+
+
+localStorage.setItem("category", JSON.stringify(category))
+localStorage.setItem("transaction", JSON.stringify(transactions))
 
 categoryFromInput.value = "";
 
   randercategory(category);
 
- 
+
   getCategory();
+  renderDashboard();
 }
 
 // category delete
@@ -303,6 +332,7 @@ function deleteCategory (id) {
 Cat_tableBody.addEventListener("click", e => {
   if(e.target.classList.contains("delete-cat")){
     deleteCategory(e.target.dataset.id);
+   
   }
 });
 
@@ -311,7 +341,33 @@ Cat_tableBody.addEventListener("click", e => {
 
 // category edit
 
-let editCategoryId = null;
+
+
+
+function editcategory (id){
+
+  const cat = category.find (c => c.id === id);
+  
+  if(!cat) return;
+categoryFromInput.value = cat.category
+editCategoryId = id;
+getCategoryBtn.textContent = "Update"
+
+}
+
+
+Cat_tableBody.addEventListener("click", e => {
+ 
+  if(e.target.classList.contains("edit-cat")) {
+editcategory(e.target.dataset.id);
+
+
+    
+
+
+  }
+  
+})
 
 
 
@@ -330,7 +386,7 @@ row.innerHTML = `
 <td>${cat.category}</td>
 
 <td>
-        <button class=" edit-btn btn btn-warning btn-sm">
+        <button class=" edit-btn btn btn-warning btn-sm edit-cat"  data-id=${cat.id} >
           Edit
         </button>
         <button class="delete-btn btn btn-danger btn-sm delete-cat"  data-id=${cat.id}>
@@ -433,5 +489,3 @@ getCategoryBtn.addEventListener("click", addCategory);
 searchInput.addEventListener("input", smoothSearch);
 sortAmount.addEventListener("change", renderDashboard);
 // Load
-renderDashboard();
-
