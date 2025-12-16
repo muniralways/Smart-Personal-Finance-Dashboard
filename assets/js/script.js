@@ -47,6 +47,46 @@ renderDashboard();
 });
 
 
+// pagination
+
+
+let currentPage = 1;
+const rowPerpage = 5;
+
+
+
+function getPaginate (data){
+  const start = (currentPage -1) * rowPerpage;
+  const  end = start + rowPerpage;
+   return data.slice(start, end)
+}
+
+
+// renderpagination
+
+function renderPagination (totalRows) {
+  const pagination = document.getElementById("pagination");
+  pagination.innerHTML = "";
+
+  const totalPage = Math.ceil(totalRows / rowPerpage);
+
+  for(let i =1; i <=totalPage; i ++){
+    const li = document.createElement("li");
+    li.className = `page-item ${i === currentPage ? "active"  : ""}`;
+    
+    
+     li.innerHTML = `<a class="page-link" href="#">${i}</a>`
+
+    li.addEventListener("click", e => {
+      e.preventDefault();
+      currentPage = i;
+      renderDashboard()
+    })
+pagination.appendChild(li)
+  }
+
+}
+
 // filter functions
 
  function filterByType(data, type) {
@@ -280,11 +320,12 @@ if(editCategoryId){
 // transaction category auto update
 
 transactions = transactions.map(tr => {
-  tr.gategory === oldCategoryName ? {... tr, category : gateval} : tr
+ return tr.gategory === oldCategoryName ? {... tr, gategory : gateval} : tr
+
 })
 
   editCategoryId = null;
-oldCategoryName = ""
+oldCategoryName = null;
   getCategoryBtn.textContent = "Add"
 
 }else{
@@ -303,7 +344,6 @@ randercategory();
 
 
 localStorage.setItem("category", JSON.stringify(category))
-localStorage.setItem("transaction", JSON.stringify(transactions))
 
 categoryFromInput.value = "";
 
@@ -351,6 +391,7 @@ function editcategory (id){
   if(!cat) return;
 categoryFromInput.value = cat.category
 editCategoryId = id;
+oldCategoryName = cat.category;
 getCategoryBtn.textContent = "Update"
 
 }
