@@ -155,7 +155,8 @@ function renderTable(data) {
     const row = document.createElement("tr");
 
     row.innerHTML = `
-      <td>${index + 1}</td>
+      <td>${(currentPage - 1) * rowPerpage + index + 1}</td>
+
       <td>${tr.date}</td>
       <td>${tr.type}</td>
       <td>${tr.gategory}</td>
@@ -262,7 +263,11 @@ data= sortByAmount(data, sortAmount);
   balanceEl.textContent = summary.income - summary.expense;
   totalEl.textContent = total;
   
-  renderTable(data);
+  
+  const paginationData = getPaginate(data);
+
+  renderTable(paginationData);
+  renderPagination(data.length)
   getCategory();
   randercategory();
 
