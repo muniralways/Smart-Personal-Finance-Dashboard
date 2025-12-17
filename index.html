@@ -159,7 +159,13 @@
   <!--  TRANSACTION TABLE -->
   <div class="row">
     <div class="col-md-12">
+          <select id="pageSize" class="form-select w-auto mb-2">
+  <option value="5">5</option>
+  <option value="10">10</option>
+  <option value="20">20</option>
+</select>
       <div class="card card-box p-3">
+    
         <table class="table table-bordered">
     
   
@@ -181,6 +187,7 @@
           </tbody>
 
         </table>
+        <p id="pageInfo"></p>
     <div id="noResult" class=" alert alert-warning text-center ">
    Data Not Found
 </div>

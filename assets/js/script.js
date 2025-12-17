@@ -51,9 +51,17 @@ renderDashboard();
 
 
 let currentPage = 1;
-const rowPerpage = 5;
+let rowPerpage = 5;
 
 
+document.getElementById("pageSize").addEventListener("change", e => {
+  rowPerpage = Number(e.target.value);
+  currentPage =1;
+  renderDashboard()
+  
+  
+
+})
 
 function getPaginate (data){
   const start = (currentPage -1) * rowPerpage;
@@ -87,11 +95,25 @@ pagination.appendChild(li)
 
 }
 
+
+// page info
+
+function RenderPageInfo (totalRows){
+
+  const start = (currentPage - 1) * rowPerpage +1;
+  const end = Math.min(start + rowPerpage - 1, totalRows);
+
+
+  document.getElementById( "pageInfo").textContent = ` ${start}-${end} of ${totalRows }enrites`
+
+}
+
 // filter functions
 
  function filterByType(data, type) {
  if( type  === "all") return data;
  return data.filter(tr => tr.type === type)
+ currentPage = 1
 }
 
 
@@ -230,6 +252,7 @@ if(order === "desc") return b.amount - a.amount;
 
 
 
+console.log(currentPage -1) * rowPerpage ;
 
 
 
@@ -267,9 +290,12 @@ data= sortByAmount(data, sortAmount);
   const paginationData = getPaginate(data);
 
   renderTable(paginationData);
-  renderPagination(data.length)
+  renderPagination(data.length);
+  RenderPageInfo(data.length);
+
   getCategory();
   randercategory();
+
 
 
 }
