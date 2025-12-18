@@ -173,6 +173,7 @@ function renderTable(data) {
     noResult.classList.add("d-none")
   }
 
+
   data.forEach((tr, index )=> {
     const row = document.createElement("tr");
 
@@ -275,7 +276,7 @@ function renderDashboard() {
 data= sortByAmount(data, sortAmount);
 
 
-
+data = [...data].reverse()
 
 
   const total = calculateTotal(data);
@@ -469,7 +470,7 @@ row.innerHTML = `
 
 
 `
-console.log(cat.gategory);
+
 
 Cat_tableBody.appendChild(row);
   })

@@ -6,20 +6,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Bootstrap -->
-   
   <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+
   <style>
     body {
       background: #f5f7fa;
       padding: 30px;
+      font-family: 'Segoe UI', sans-serif;
     }
+
+    h2, h5 {
+      font-weight: 600;
+    }
+
     .card-box {
       border-radius: 15px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
     }
+
+    .card-box:hover {
+      transform: translateY(-5px);
+    }
+
     table th, table td {
       text-align: center;
       vertical-align: middle;
+    }
+
+    #noResult {
+      display: none;
+    }
+
+    .modal .table th, .modal .table td {
+      font-size: 0.9rem;
+    }
+
+    .btn-add-category {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    @media (max-width: 768px) {
+      .row.g-2 > div {
+        margin-bottom: 10px;
+      }
     }
   </style>
 </head>
@@ -27,118 +58,94 @@
 
 <div class="container">
 
-  <!--  HEADER -->
+  <!-- HEADER -->
   <div class="row mb-4">
     <div class="col text-center">
-      <h2>💰 Smart Personal Finance Dashboard</h2>
-      <p class="text-muted">Track your income & expense easily</p>
+      <h2>  Personal Finance Dashboard</h2>
+      <p class="text-muted">Track  income & expenses easily</p>
     </div>
   </div>
 
   <!-- SUMMARY CARDS -->
-  <div class="row mb-4">
-    <div class="col-md-3">
-      <div class="card card-box p-3 text-center">
-        <h6>Total Income</h6>
+  <div class="row mb-4 g-3">
+    <div class="col-md-3 col-6">
+      <div class="card card-box p-3 text-center bg-light">
+        <h6 class="text-secondary">Total Income</h6>
         <h4 id="income">0</h4>
       </div>
     </div>
-
-    <div class="col-md-3">
-      <div class="card card-box p-3 text-center">
-        <h6>Total Expense</h6>
+    <div class="col-md-3 col-6">
+      <div class="card card-box p-3 text-center bg-light">
+        <h6 class="text-secondary">Total Expense</h6>
         <h4 id="expense">0</h4>
       </div>
     </div>
-
-    <div class="col-md-3">
-      <div class="card card-box p-3 text-center">
-        <h6>Balance</h6>
+    <div class="col-md-3 col-6">
+      <div class="card card-box p-3 text-center bg-light">
+        <h6 class="text-secondary">Balance</h6>
         <h4 id="balance">0</h4>
       </div>
     </div>
-
-    <div class="col-md-3">
-      <div class="card card-box p-3 text-center">
-        <h6>Total Transactions</h6>
+    <div class="col-md-3 col-6">
+      <div class="card card-box p-3 text-center bg-light">
+        <h6 class="text-secondary">Total Transactions</h6>
         <h4 id="total">0</h4>
       </div>
     </div>
   </div>
 
-  <!--  ADD TRANSACTION FORM -->
+  <!-- ADD TRANSACTION FORM -->
   <div class="row mb-4">
-    <div class="col-md-12">
+    <div class="col-12">
       <div class="card card-box p-4">
         <h5>Add Transaction</h5>
-
-        <div class="row g-2 mt-2">
-          <div class="col-md-4">
+        <div class="row g-2 mt-2 align-items-end">
+          <div class="col-md-3 col-6">
+            <label class="form-label">Date</label>
             <input type="date" id="dateInput" class="form-control">
           </div>
-
-          <div class="col-md-4">
+          <div class="col-md-3 col-6">
+            <label class="form-label">Amount</label>
             <input type="number" id="amountInput" class="form-control" placeholder="Amount">
           </div>
-
-          <div class="col-md-4">
+          <div class="col-md-3 col-6">
+            <label class="form-label">Type</label>
             <select id="typeInput" class="form-select">
               <option value="">Select Type</option>
               <option value="income">Income</option>
               <option value="expense">Expense</option>
             </select>
           </div>
-        <div class="col-md-4">
-  <label class="form-label">Category</label>
-
-  <div class="input-group">
-    <!-- Category Dropdown -->
-    <select id="categoryInput" class="form-select">
-      
-    </select>
-
-   
-  <button id="modalbtn_renader" type="button" class="btn btn-success"
-        data-bs-toggle="modal"
-        data-bs-target="#gategoryModal">
-  +
-</button>
-
-  </div>
-</div>
-
-  
-
+          <div class="col-md-3 col-6">
+            <label class="form-label">Category</label>
+            <div class="input-group">
+              <select id="categoryInput" class="form-select"></select>
+              <button id="modalbtn_renader" type="button" class="btn btn-success btn-add-category"
+                      data-bs-toggle="modal" data-bs-target="#gategoryModal">+</button>
+            </div>
+          </div>
         </div>
-
-        <button id="addBtn" class="btn btn-primary mt-3 w-100">
-          Add Transaction
-        </button>
+        <button id="addBtn" class="btn btn-primary mt-3 w-100">Add Transaction</button>
       </div>
     </div>
   </div>
-  <div class="row">
+
+  <!-- seacrh and sort -->
+  <div class="row mb-3 g-2">
     <div class="col-md-6">
-      <input 
-  type="text" 
-  id="searchInput" 
-  class="form-control mb-2"
-  placeholder="Search by amount, type, date..."
->
+      <input type="text" id="searchInput" class="form-control" placeholder="Search by amount, type, date...">
     </div>
     <div class="col-md-6">
       <select id="sortAmount" class="form-select">
-  <option value="none">Sort By Amount</option>
-  <option value="asc">Low → High</option>
-  <option value="desc">High → Low</option>
-</select>
-
+        <option value="none">Sort By Amount</option>
+        <option value="asc">Low → High</option>
+        <option value="desc">High → Low</option>
+      </select>
     </div>
   </div>
 
-
-  <!--  FILTER SECTION -->
-  <div class="row mb-3">
+  <!-- filter -->
+  <div class="row mb-3 g-2">
     <div class="col-md-6">
       <select id="filter-type" class="form-select">
         <option value="all">All Type</option>
@@ -146,7 +153,6 @@
         <option value="expense">Expense</option>
       </select>
     </div>
-
     <div class="col-md-6">
       <select id="filter-month" class="form-select">
         <option value="all">All Months</option>
@@ -155,45 +161,37 @@
       </select>
     </div>
   </div>
-   
-  <!--  TRANSACTION TABLE -->
+
+  <!--  tansaction table-->
   <div class="row">
-    <div class="col-md-12">
-          <select id="pageSize" class="form-select w-auto mb-2">
-  <option value="5">5</option>
-  <option value="10">10</option>
-  <option value="20">20</option>
-</select>
+    <div class="col-12">
+      <select id="pageSize" class="form-select w-auto mb-2">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+      </select>
+
       <div class="card card-box p-3">
-    
-        <table class="table table-bordered">
-    
-  
+        <table class="table table-bordered table-hover align-middle">
           <thead class="table-dark">
             <tr>
-      <th>ID</th>
+              <th>ID</th>
               <th>Date</th>
               <th>Type</th>
               <th>Category</th>
               <th>Amount</th>
               <th>Action</th>
             </tr>
-
           </thead>
-          <tbody id="tableBody">
-                         
-        
-            <!-- JS will render rows here -->
-          </tbody>
-
+          <tbody id="tableBody"></tbody>
         </table>
-        <p id="pageInfo"></p>
-    <div id="noResult" class=" alert alert-warning text-center ">
-   Data Not Found
-</div>
-    <nav class="mt-3">
-<ul id="pagination" class="pagination justify-content-center mt-3"></ul>
-</nav>
+
+        <p id="pageInfo" class="text-center mt-2"></p>
+        <div id="noResult" class="alert alert-warning text-center">Data Not Found</div>
+
+        <nav>
+          <ul id="pagination" class="pagination justify-content-center mt-3"></ul>
+        </nav>
       </div>
     </div>
   </div>
@@ -201,65 +199,70 @@
 </div>
 
 
-<!-- Modal -->
-<div class="modal fade" id="gategoryModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
+<!--gategory modal -->
 
+<div class="modal fade" id="gategoryModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      
+    
       <div class="modal-header">
         <h5 class="modal-title">Add Category</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-<div class="row">
-  <div class="col-md-8">
-     <div class="modal-body">
-          <input 
-  type="text" 
-  id="categoryInput-modal" 
-  class="form-control mb-2"
-  placeholder="Add Category"
->
+
+ 
+      <div class="modal-body">
+<div class="row g-2 mb-3">
+          <div class="col-md-8 col-7">
+            <input type="text" id="categoryInput-modal" class="form-control" placeholder="Add Category">
+          </div>
+          <div class="col-md-4 col-5">
+            <button id="getCategoryBtn" type="button" class="btn btn-primary w-100">Add</button>
+          </div>
+        </div>
+
+        <div class="mb-3 w-auto">
+          <label class="form-label">Show:</label>
+          <select id="showCategory" class="form-select w-auto">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+
+
+        
+
+        <hr>
+
+    
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="Cat_tableBody"></tbody>
+          </table>
+        </div>
+
       </div>
-  </div>
-  <div class="col-md-4">
-            <button id="getCategoryBtn" type="button" class="btn btn-primary mt-3">Add</button>
 
-  </div>
-</div>
-     
-      <table class="table table-bordered">
-    
-  
-          <thead class="table-dark">
-            <tr>
-      <th>ID</th>
-             
-              <th>Name</th>
-              <th>Action</th>
-            </tr>
-
-          </thead>
-          <tbody class="p-2" id="Cat_tableBody">
-                         
-      
-            <!-- JS will render rows here -->
-          </tbody>
-
-        </table>
-      
+   
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
 
     </div>
-    <div class="modal-footer">
-    
-
-    </div>
-    
   </div>
 </div>
 
 
-<script src="./assets/js/script.js " type="module"></script>
-<!-- <script src="./assets/js/function.js"></script> -->
+<script src="./assets/js/script.js" type="module"></script>
 <script src="./assets/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
