@@ -63,12 +63,61 @@ document.getElementById("pageSize").addEventListener("change", e => {
 
 })
 
+
+// getegory pagination
+
+let catCurrentPage = 1;
+let catRowPage = 5
+
+document.getElementById("showCategoryPage").addEventListener("change", e =>{
+catRowPage = Number(e.target.value) ;
+catCurrentPage = 1;
+
+
+randercategory()
+})
+
+
+
+
+// transaction pagination
 function getPaginate (data){
   const start = (currentPage -1) * rowPerpage;
   const  end = start + rowPerpage;
    return data.slice(start, end)
 }
+// catPaginatio
 
+function getCatPaginate (data){
+  const start = (catCurrentPage -1) * catRowPage;
+  const  end = start + catRowPage;
+   return data.slice(start, end)
+}
+
+// render category pagination
+
+function renderCatPagination (totalRows) {
+  const Catpagination = document.getElementById("Catpagination");
+  Catpagination.innerHTML = "";
+
+  const totalPage = Math.ceil(totalRows / catRowPage);
+
+  for(let i =1; i <=totalPage; i ++){
+    const li = document.createElement("li");
+    li.className = `page-item ${i === catCurrentPage ? "active"  : ""}`;
+    
+    
+     li.innerHTML = `<a class="page-link" href="#">${i}</a>`
+
+    li.addEventListener("click", e => {
+      e.preventDefault();
+      catCurrentPage = i;
+      randercategory();
+    })
+Catpagination.appendChild(li)
+  }
+
+}
 
 // renderpagination
 
@@ -253,7 +302,7 @@ if(order === "desc") return b.amount - a.amount;
 
 
 
-console.log(currentPage -1) * rowPerpage ;
+
 
 
 
@@ -450,12 +499,14 @@ editcategory(e.target.dataset.id);
 function randercategory (data = category) {
   Cat_tableBody.innerHTML = "";
 
+const catPaginateData = getCatPaginate(category)
 
-  data.forEach((cat, index ) => {
+  catPaginateData.forEach((cat, index ) => {
  const row = document.createElement("tr")
 
 row.innerHTML = `
-<td>${index + 1}</td>
+<td>${(catCurrentPage - 1) * catRowPage + index + 1}</td>
+
 <td>${cat.category}</td>
 
 <td>
@@ -475,7 +526,7 @@ row.innerHTML = `
 Cat_tableBody.appendChild(row);
   })
 
-  
+  renderCatPagination(category.length)
 }
 
 
