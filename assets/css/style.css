@@ -1,10 +1,45 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+ body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f7fa;
+    }
 
-.sidebar {
-  width: 220px;
-  min-height: 100vh;
-}
+    .sidebar {
+      min-width: 220px;
+      max-width: 220px;
+      height: 100vh;
+      background: #343a40;
+      color: #fff;
+      position: fixed;
+    }
+
+    .sidebar .nav-link {
+      color: #fff;
+    }
+
+    .sidebar .nav-link.active {
+      background: #495057;
+      border-radius: 5px;
+    }
+
+    main {
+      margin-left: 220px;
+      padding: 30px;
+    }
+
+    .card-box {
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      background: #fff;
+    }
+
+    .card-box:hover { transform: translateY(-3px); }
+
+    table th, table td { text-align: center; vertical-align: middle; }
+
+    .d-none { display: none !important; }
+
+    @media (max-width: 768px) {
+      main { margin-left: 0; padding: 15px; }
+      .sidebar { position: relative; height: auto; max-width: 100%; }
+    }
