@@ -113,7 +113,7 @@ function renderCatPagination (totalRows) {
       e.preventDefault();
       catCurrentPage = i;
       randercategory();
-    })
+    });
 Catpagination.appendChild(li)
   }
 

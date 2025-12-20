@@ -56,9 +56,34 @@
 </head>
 <body>
 
-<div class="container">
+<div class="d-flex">
 
-  <!-- HEADER -->
+
+  <aside class="sidebar bg-dark text-white p-3">
+    <h4 class="text-center mb-4">💰 Finance</h4>
+
+   <ul class="nav flex-column gap-2">
+  <li>
+    <a class="nav-link active" href="#" data-target="dashboard-section">📊 Dashboard</a>
+  </li>
+  <li>
+    <a class="nav-link" href="#" data-target="transactions-section">💳 Transactions</a>
+  </li>
+  <li>
+    <a class="nav-link" href="#" data-bs-target="categories">🗂 Summary</a>
+  </li>
+</ul>
+
+  </aside>
+
+  <main class="flex-grow-1 p-4 bg-light">
+
+  
+   
+
+  
+    <div class="container-fluid">
+   
   <div class="row mb-4">
     <div class="col text-center">
       <h2>  Personal Finance Dashboard</h2>
@@ -66,7 +91,9 @@
     </div>
   </div>
 
-  <!-- SUMMARY CARDS -->
+
+  <section data-section="dashboard-section" class="d-none">
+
   <div class="row mb-4 g-3">
     <div class="col-md-3 col-6">
       <div class="card card-box p-3 text-center bg-light">
@@ -93,9 +120,10 @@
       </div>
     </div>
   </div>
+  </section>
 
-  <!-- ADD TRANSACTION FORM -->
-  <div class="row mb-4">
+<section data-section="transactions-section" class="d-none">
+<div class="row mb-4">
     <div class="col-12">
       <div class="card card-box p-4">
         <h5>Add Transaction</h5>
@@ -196,7 +224,14 @@
     </div>
   </div>
 
+</section>
+
+  
 </div>
+
+<!-- summary -->
+
+<h1 data-bs-target="#monir">Monir</h1>
 
 
 <!--gategory modal -->
@@ -262,6 +297,42 @@
     </div>
   </div>
 </div>
+    </div>
+
+  </main>
+
+</div>
+
+
+<div class="container">
+
+  
+<script>
+  const links = document.querySelectorAll(".sidebar .nav-link");
+  const sections = document.querySelectorAll("section[data-section]");
+
+  links.forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+
+      const target = link.dataset.target;
+
+    
+      sections.forEach(sec => sec.classList.add("d-none"));
+
+  
+      document
+        .querySelector(`section[data-section="${target}"]`)
+        .classList.remove("d-none");
+
+
+      links.forEach(l => l.classList.remove("active"));
+
+      
+      link.classList.add("active");
+    });
+  });
+</script>
 
 
 <script src="./assets/js/script.js" type="module"></script>
