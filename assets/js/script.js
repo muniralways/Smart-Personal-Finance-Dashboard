@@ -205,7 +205,7 @@ renderDashboard();
 
 
 // summmay
-function getSummary(data) {
+function getSummary(data = transactions) {
   let income = 0;
   let expense = 0;
 
@@ -562,32 +562,37 @@ Cat_tableBody.appendChild(row);
 //  function  chart render 
 
 
+let totalChart;
 
-function renderCategoryChart ( ) {
+function renderCategoryChart() {
 
-  const summary = CatSummaryChart();
-  const labels = Object.keys (summary);
-  const data = Object.values (summary);
-  const ctx = document.getElementById('expenseCategoryChart').getContext('2d');
+  const totals = getSummary();
 
-new Chart (ctx, {
-  type : 'bar',
-  data : {
-    labels : labels,
-    datasets : [{
-      label : 'Expense by Category',
-      data : data,
-      backgroundColor : [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',]
-    }]
-  } ,options : {
-    responsive : true,
-    
-  }
-})
+  if (totalChart) totalChart.destroy();
 
+  totalChart = new Chart(
+    document.getElementById("totalincomeAndExpenseChart"),
+    {
+      type: 'bar',
+      data: {
+        labels: ['Income', 'Expense'],
+        datasets: [{
+          label: 'Amount',
+          data: [totals.income, totals.expense],
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(255, 99, 132, 0.6)'
+          ]
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    }
+  );
 }
+
+
 // কাজ  চলছে
 
 
