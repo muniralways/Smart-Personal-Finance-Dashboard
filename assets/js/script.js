@@ -34,16 +34,12 @@ const Cat_tableBody = document.getElementById("Cat_tableBody");
 
 // data not found element
 const noResult = document.getElementById("noResult");
+const sortAmount = document.getElementById("sortAmount");
 
 document.addEventListener("DOMContentLoaded", () => {
-
-
-
-
-// ... all functions ...
-
-renderDashboard();
-
+  getCategory();
+  randercategory();
+  renderDashboard();
 });
 
 
@@ -118,6 +114,14 @@ Catpagination.appendChild(li)
   }
 
 }
+const showCategoryPage = document.getElementById("showCategoryPage");
+if (showCategoryPage) {
+  showCategoryPage.addEventListener("change", e => {
+    catRowPage = Number(e.target.value);
+    catCurrentPage = 1;
+    randercategory();
+  });
+}
 
 // renderpagination
 
@@ -160,9 +164,12 @@ function RenderPageInfo (totalRows){
 // filter functions
 
  function filterByType(data, type) {
+
+ currentPage = 1
+
  if( type  === "all") return data;
  return data.filter(tr => tr.type === type)
- currentPage = 1
+
 }
 
 
@@ -289,7 +296,7 @@ const smoothSearch = debounce (renderDashboard, 300);
 // short Funciton
 
 function sortByAmount (data, order) {
-if(order === "asc") return data;
+if(order === "none") return data;
 
 return [...data].sort((a,b ) =>{
   
@@ -312,6 +319,7 @@ function renderDashboard() {
   const search = searchInput.value.toLowerCase();
    const sortAmount = document.getElementById("sortAmount").value;
 
+  console.log(sortAmount);
   
   
   let data = filterByType(transactions, type);
@@ -525,6 +533,12 @@ row.innerHTML = `
 
 Cat_tableBody.appendChild(row);
   })
+
+
+
+
+
+
 
   renderCatPagination(category.length)
 }
