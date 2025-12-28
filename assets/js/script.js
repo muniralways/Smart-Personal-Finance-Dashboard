@@ -37,9 +37,11 @@ const noResult = document.getElementById("noResult");
 const sortAmount = document.getElementById("sortAmount");
 
 document.addEventListener("DOMContentLoaded", () => {
+ renderCategoryChart();
   getCategory();
   randercategory();
   renderDashboard();
+
 });
 
 
@@ -542,6 +544,51 @@ Cat_tableBody.appendChild(row);
 
   renderCatPagination(category.length)
 }
+
+// fun chart
+
+ function CatSummaryChart (){
+   const summary = {};
+
+   transactions.forEach ( tr => {
+    if(!summary[tr.gategory]) summary[tr.gategory] = 0;
+    summary[tr.gategory] += tr.amount;
+   })
+   return summary;
+
+ }
+
+
+//  function  chart render 
+
+
+
+function renderCategoryChart ( ) {
+
+  const summary = CatSummaryChart();
+  const labels = Object.keys (summary);
+  const data = Object.values (summary);
+  const ctx = document.getElementById('expenseCategoryChart').getContext('2d');
+
+new Chart (ctx, {
+  type : 'bar',
+  data : {
+    labels : labels,
+    datasets : [{
+      label : 'Expense by Category',
+      data : data,
+      backgroundColor : [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',]
+    }]
+  } ,options : {
+    responsive : true,
+    
+  }
+})
+
+}
+// কাজ  চলছে
 
 
 // get category from local storage
