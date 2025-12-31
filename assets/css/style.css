@@ -56,6 +56,43 @@
   display: block;
 }
 
+.toast2 {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+
+  padding: 12px 20px;
+  border-radius: 6px;
+
+  color: white;
+  font-size: 14px;
+
+  opacity: 0;
+  transform: translateX(100px);
+  transition: all 0.4s ease;
+
+  pointer-events: none;
+  z-index: 10000;
+}
+
+
+.toast-success {
+    background: #28a745;
+}
+.toast-error {
+    background: #dc3545;
+}
+
+.toast-show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast-warning {
+  background: #ffc107;
+  color: #000;
+}
+
 
     @media (max-width: 768px) {
       main { margin-left: 0; padding: 15px; }

@@ -44,7 +44,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-// 
+// tost function
+
+function showtoast (msg, type) {
+
+   let tost=document.getElementById("toast2");
+       
+   let icon = '✅'
+
+
+    if( type  === 'error' ){
+        icon = '❌'
+    }else if ( type === 'warning' ){
+        icon = '⚠️'
+    }  
+
+     if( type === 'success'){
+    tost.classList.add('toast-success')
+  }else if ( type === 'error'){
+    tost.classList.add('toast-error')
+  }else if ( type === 'warning'){
+    tost.classList.add('toast-warning')
+  }
+
+
+   tost.innerHTML = `${icon} ${msg}`;
+   tost.classList.add("toast-show");
+
+   setTimeout(() => {
+     tost.classList.remove("toast-show");
+   }, 3000);
+}
+
+showtoast ("Welcome", "success")
 // pagination
 
 
@@ -117,6 +149,7 @@ Catpagination.appendChild(li)
 
 }
 const showCategoryPage = document.getElementById("showCategoryPage");
+
 if (showCategoryPage) {
   showCategoryPage.addEventListener("change", e => {
     catRowPage = Number(e.target.value);
@@ -224,6 +257,7 @@ function deleteTransaction(id) {
 
 localStorage.setItem("transactions", JSON.stringify(transactions));
  renderDashboard();
+ showtoast ("Transaction deleted successfully", "success")
     }
   })
 
@@ -426,7 +460,7 @@ let  gateval = categoryFromInput.value.trim();
 const id = 'cat' + new Date ().getTime() + Math.random().toString(36).slice(2)
 
 if(!gateval){
-  alert ("Please enter category")
+  showtoast ("Please enter category name", "error")
   return
 }
 
@@ -449,7 +483,7 @@ transactions = transactions.map(tr => {
   editCategoryId = null;
 oldCategoryName = null;
   getCategoryBtn.textContent = "Add"
-
+showtoast ("category update successfully", "success")
 }else{
 
 const newCategory = {
@@ -474,11 +508,13 @@ categoryFromInput.value = "";
 
   getCategory();
   renderDashboard();
+  showtoast ("category add successfully", "success")
 }
 
 // category delete
 
 function deleteCategory (id) {
+
  category = category.filter(cat => String(cat.id) !== String(id));
 
   localStorage.setItem("category", JSON.stringify(category))
@@ -654,7 +690,7 @@ function addTransaction(e) {
   const id =  'tr' + new Date().getTime() + Math.random().toString(36).slice(2)
 
 if(!date || !amount || !type ){
-  alert ("Please fill all fields")
+showtoast ("Please fil all the field", "error")
   return
 }
 
