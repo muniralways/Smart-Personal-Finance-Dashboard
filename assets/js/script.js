@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-
+// 
 // pagination
 
 
@@ -189,14 +189,45 @@ function calculateTotal(data) {
 return total;
 }
 
+// transaction delelte confirm
+
+function showConfirmToast(msg, onConfirm) {
+  const toast = document.getElementById("confirmToast");
+
+  toast.innerHTML = `
+    <p>⚠️ ${msg}</p>
+    <div class="d-flex justify-content-end gap-2 mt-2">
+      <button class="btn btn-danger btn-sm" id="confirmYes">Yes</button>
+      <button class="btn btn-secondary btn-sm" id="confirmNo">No</button>
+    </div>
+  `;
+
+  toast.classList.add("show");
+
+  document.getElementById("confirmYes").onclick = () => {
+    toast.classList.remove("show");
+    onConfirm(true);
+  };
+
+  document.getElementById("confirmNo").onclick = () => {
+    toast.classList.remove("show");
+    onConfirm(false);
+  };
+}
+
 
 // delte funcion
 function deleteTransaction(id) {
-transactions = transactions.filter(tr => String(tr.id) !== String(id));
+  showConfirmToast("Are you sure ?" , (confirmed) => {
+    if(confirmed) {
+     transactions = transactions.filter(tr => String(tr.id) !== String(id));
 
 localStorage.setItem("transactions", JSON.stringify(transactions));
+ renderDashboard();
+    }
+  })
 
-renderDashboard();
+
 
 
 
@@ -593,7 +624,7 @@ function renderCategoryChart() {
 }
 
 
-// কাজ  চলছে
+
 
 
 // get category from local storage

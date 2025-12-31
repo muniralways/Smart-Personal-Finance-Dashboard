@@ -39,6 +39,24 @@
 
     .d-none { display: none !important; }
 
+
+.confirm-toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff3cd;
+  border: 1px solid #ffecb5;
+  padding: 16px;
+  border-radius: 8px;
+  display: none;
+  z-index: 9999;
+}
+.confirm-toast.show {
+  display: block;
+}
+
+
     @media (max-width: 768px) {
       main { margin-left: 0; padding: 15px; }
       .sidebar { position: relative; height: auto; max-width: 100%; }
