@@ -77,6 +77,13 @@ function showtoast (msg, type) {
 }
 
 showtoast ("Welcome", "success")
+
+
+
+
+
+
+
 // pagination
 
 
@@ -248,24 +255,81 @@ function showConfirmToast(msg, onConfirm) {
   };
 }
 
+// unDo Function
+
+let deletecach ;
+let deleteindex
+let undoTimer;
+
+function undotoast (msg, onUndo, exprie ){
+  let untoast = document.getElementById("undoToast");
+
+  untoast.innerHTML = `
+  ${msg}
+  <button class="btn btn-link btn-sm" id="undoBtn">Undo</button>
+  
+  `
+  untoast.classList.add("show");
+
+document.getElementById("undoBtn").onclick = () => {
+  clearTimeout(undoTimer);
+  untoast.classList.remove("show");
+  onUndo();
+}
+
+undoTimer = setTimeout (() => {
+  untoast.classList.remove("show");
+  exprie();
+}, 5000)
+
+}
 
 // delte funcion
 function deleteTransaction(id) {
   showConfirmToast("Are you sure ?" , (confirmed) => {
-    if(confirmed) {
-     transactions = transactions.filter(tr => String(tr.id) !== String(id));
 
-localStorage.setItem("transactions", JSON.stringify(transactions));
- renderDashboard();
- showtoast ("Transaction deleted successfully", "success")
+
+
+
+    if(!confirmed) {
+     showtoast( "delete cancel ", "warning")
+     return;
     }
-  })
+
+deleteindex = transactions.findIndex ( tr => String(tr.id) === String(id) );
+
+if( deleteindex === -1) return;
+
+deletecach = transactions[deleteindex];
+
+transactions.splice(deleteindex, 1);
+
+renderDashboard();
 
 
 
+undotoast(
+      "Transaction deleted",
+      () => {
+        
+        transactions.splice(deleteindex, 0, deletecach);
+        localStorage.setItem("transactions", JSON.stringify(transactions));
+        renderDashboard();
+        showtoast("Transaction restored", "success");
 
+        deletecach = null;
+        deleteindex = null;
+      },
+      () => {
+        
+        localStorage.setItem("transactions", JSON.stringify(transactions));
+        showtoast("Transaction deleted permanently", "success");
 
-
+        deletecach = null;
+        deleteindex = null;
+      }
+    );
+  });
 }
 
 
