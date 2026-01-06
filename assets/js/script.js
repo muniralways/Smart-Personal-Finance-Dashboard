@@ -2,6 +2,7 @@
 let category = JSON.parse(localStorage.getItem("category")) || [ ];
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [] ;
  ;
+let dues = JSON.parse(localStorage.getItem("dues")) || [];
 
 
 
@@ -20,6 +21,16 @@ const totalEl = document.getElementById("total");
 const dateInput = document.getElementById("dateInput");
 const amountInput = document.getElementById("amountInput");
 const typeInput = document.getElementById("typeInput");
+const pyType = document.getElementById("pyType");
+typeInput.addEventListener("change", () => {
+  if (typeInput.value === "income") {
+    pyType.classList.add("d-none");
+    dueFields.classList.add("d-none");
+  } else {
+    pyType.classList.remove("d-none");
+  }
+})
+
 const addBtn = document.getElementById("addBtn");
 const gategoryInput = document.getElementById("categoryInput");
 const searchInput = document.getElementById("searchInput");
@@ -35,6 +46,27 @@ const Cat_tableBody = document.getElementById("Cat_tableBody");
 // data not found element
 const noResult = document.getElementById("noResult");
 const sortAmount = document.getElementById("sortAmount");
+// pay type input
+const paymentTypeInput = document.getElementById("paymentTypeInput");
+// pay
+paymentTypeInput.addEventListener("change", () => {
+  if (paymentTypeInput.value === "due") {
+    dueFields.classList.remove("d-none");
+  } else {
+    dueFields.classList.add("d-none");
+  }
+});
+
+
+
+// due fild manage
+const dueFields = document.getElementById("dueFields");
+const duePersonInput = document.getElementById("duePersonInput");
+const dueDateInput = document.getElementById("dueDateInput");
+
+
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
  renderCategoryChart();
@@ -740,18 +772,28 @@ function getCategory () {
   });
 }
 
+// pay type fun
+
+function paymentType (){
+  const paymentType = paymentTypeInput.value;
+
+}
+
 
 
 // add transaction
 function addTransaction(e) {
   
 
+  
 
   const date = dateInput.value;
   const amount = Number(amountInput.value);
   const type = typeInput.value;
   const gategory = gategoryInput.value
   const id =  'tr' + new Date().getTime() + Math.random().toString(36).slice(2)
+const paymentType = paymentTypeInput.value;
+
 
 if(!date || !amount || !type ){
 showtoast ("Please fil all the field", "error")
@@ -765,33 +807,73 @@ if(editId){
         : tr
 );
 
-     renderDashboard();
+localStorage.setItem("transactions", JSON.stringify(transactions));
+     
   editId = null;
     addBtn.textContent = "Add";
-  
+  renderDashboard();
+dateInput.value = "";
+amountInput.value = "";
+typeInput.value = "";
 
-}else{
+ return;
+}
+
+
+
 const newTransaction = {
   id,
   date,
   amount,
   type,
-  gategory: gategoryInput.value
+  gategory: gategoryInput.value,
+  paymentType,
+  dueid : null
+
+};
+
+
+ if( paymentType === "due"){
+  const dueid = 'due' + new Date().getTime() + Math.random().toString(36).slice(2)
+ 
+const person = duePersonInput.value.trim();
+const dueDate = dueDateInput.value;
+
+if(!person || ! dueDate){
+  showtoast("Due person name and date required", "error")
+  return
 }
+
+const newDue = {
+  dueId: dueid,
+  transactionId: id,
+  person,
+  dueDate,
+  amount,
+  status: "unpaid"
+
+}
+
+dues.push (newDue)
+localStorage.setItem("dues", JSON.stringify(dues));
+newTransaction.dueid = dueid;
+}
+
+
 transactions.push (newTransaction)
 
-
-
-}
 localStorage.setItem("transactions", JSON.stringify(transactions))
 
 dateInput.value = "";
 amountInput.value = "";
-typeInput.value = "income";
+typeInput.value = "";
 
 renderDashboard();
 
+
 }
+
+
 
 
 

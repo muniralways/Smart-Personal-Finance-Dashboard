@@ -89,7 +89,7 @@
               </div>
               <div class="col-md-3 col-6">
                 <label class="form-label">Type</label>
-                <select id="typeInput" class="form-select">
+                <select id="typeInput" class="form-select ">
                   <option value="">Select Type</option>
                   <option value="income">Income</option>
                   <option value="expense">Expense</option>
@@ -104,10 +104,35 @@
                 </div>
               </div>
             </div>
+            <div class="row g-2 mt-2  align-items-end">
+              
+              
+              <div id="pyType" class=" d-none col-md-3 col-6">
+                
+  <label class="form-label">Payment Type</label>
+  <select id="paymentTypeInput" class="form-select">
+    <option value="cash">Cash</option>
+    <option value="due">Due</option>
+  </select>
+
+
+              </div>
+              <div id="dueFields" class="row g-2 d-none  mt-2">
+  <div class="col-md-6">
+    <input id="duePersonInput" class="form-control" placeholder="Due From (Name)">
+  </div>
+  <div class="col-md-6">
+    <input id="dueDateInput" type="date" class="form-control">
+  </div>
+</div>
+
+              
+            </div>
             <button id="addBtn" class="btn btn-primary mt-3 w-100">Add Transaction</button>
           </div>
         </div>
       </div>
+      
 
       <div class="row mb-3 g-2">
         <div class="col-md-6">
