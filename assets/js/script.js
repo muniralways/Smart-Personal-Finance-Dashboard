@@ -4,7 +4,7 @@ let transactions = JSON.parse(localStorage.getItem("transactions")) || [] ;
  ;
 let dues = JSON.parse(localStorage.getItem("dues")) || [];
 
-
+let accounts = JSON.parse(localStorage.getItem("accounts")) || [];
 
 
 const filterType = document.getElementById("filter-type");
@@ -22,12 +22,15 @@ const dateInput = document.getElementById("dateInput");
 const amountInput = document.getElementById("amountInput");
 const typeInput = document.getElementById("typeInput");
 const pyType = document.getElementById("pyType");
+const duePersonWrap = document.getElementById("duePersonWrap");
 typeInput.addEventListener("change", () => {
   if (typeInput.value === "income") {
     pyType.classList.add("d-none");
     dueFields.classList.add("d-none");
+   
   } else {
     pyType.classList.remove("d-none");
+    duePersonWrap.classList.remove("d-none");
   }
 })
 
@@ -64,7 +67,11 @@ const dueFields = document.getElementById("dueFields");
 const duePersonInput = document.getElementById("duePersonInput");
 const dueDateInput = document.getElementById("dueDateInput");
 
+// acc save btn
 
+const accPhone = document.getElementById("accPhone");
+const accName = document.getElementById("accName");
+const saveAccBtn = document.getElementById("saveAccountBtn");
 
 
 
@@ -783,100 +790,176 @@ function paymentType (){
 
 // add transaction
 function addTransaction(e) {
-  
-
-  
 
   const date = dateInput.value;
   const amount = Number(amountInput.value);
   const type = typeInput.value;
-  const gategory = gategoryInput.value
-  const id =  'tr' + new Date().getTime() + Math.random().toString(36).slice(2)
-const paymentType = paymentTypeInput.value;
+  const gategory = gategoryInput.value;
+  const paymentType = paymentTypeInput.value;
+  const id = 'tr' + Date.now() + Math.random().toString(36).slice(2);
+
+  if (!date || !amount || !type) {
+    showtoast("Please fill all the field", "error");
+    return;
+  }
 
 
-if(!date || !amount || !type ){
-showtoast ("Please fil all the field", "error")
-  return
-}
-
-if(editId){
-   transactions = transactions.map(tr => 
-    String(tr.id) === String(editId)
+  if (editId) {
+    transactions = transactions.map(tr =>
+      String(tr.id) === String(editId)
         ? { ...tr, date, amount, type, gategory }
         : tr
-);
+    );
 
-localStorage.setItem("transactions", JSON.stringify(transactions));
-     
-  editId = null;
+    localStorage.setItem("transactions", JSON.stringify(transactions));
+    editId = null;
     addBtn.textContent = "Add";
-  renderDashboard();
-dateInput.value = "";
-amountInput.value = "";
-typeInput.value = "";
+    renderDashboard();
+    dateInput.value = "";
+    amountInput.value = "";
+    typeInput.value = "";
+    return;
+  }
 
- return;
-}
+  
+  let linkedAccount = null;
+
+  if (paymentType === "due" && type === "expense") {
+
+    const accountVal = duePersonInput.value.trim();
+console.log(accountVal);
+
+    if (!accountVal) {
+      showtoast("Account ID /", "error");
+      return;
+    }
+
+    linkedAccount = findAccountId(accountVal);
+
+    if (!linkedAccount) {
+      showtoast("Account not found", "error");
+      return;
+    }
+
+    linkedAccount.balance += amount;
+
+    linkedAccount.transactions.push({
+      trId: id,
+      date,
+      amount,
+      type: "due"
+    });
+
+    localStorage.setItem("accounts", JSON.stringify(accounts));
+  }
 
 
+  const newTransaction = {
+    id,
+    date,
+    amount,
+    type,
+    gategory,
+    paymentType,
+    accountId: linkedAccount ? linkedAccount.id : null
+  };
 
-const newTransaction = {
-  id,
-  date,
-  amount,
-  type,
-  gategory: gategoryInput.value,
-  paymentType,
-  dueid : null
-
-};
-
-
- if( paymentType === "due"){
-  const dueid = 'due' + new Date().getTime() + Math.random().toString(36).slice(2)
  
-const person = duePersonInput.value.trim();
-const dueDate = dueDateInput.value;
+  if (paymentType === "due") {
+    const dueid = 'due' + Date.now() + Math.random().toString(36).slice(2);
+    const person = duePersonInput.value.trim();
+  
+    if (!person ) {
+      showtoast("Due person name and date required", "error");
+      return;
+    }
 
-if(!person || ! dueDate){
-  showtoast("Due person name and date required", "error")
-  return
-}
+    dues.push({
+      dueId: dueid,
+      transactionId: id,
+      person,
+   
+      amount,
+      status: "unpaid"
+    });
 
-const newDue = {
-  dueId: dueid,
-  transactionId: id,
-  person,
-  dueDate,
-  amount,
-  status: "unpaid"
+    localStorage.setItem("dues", JSON.stringify(dues));
+  }
 
-}
+  transactions.push(newTransaction);
+  localStorage.setItem("transactions", JSON.stringify(transactions));
 
-dues.push (newDue)
-localStorage.setItem("dues", JSON.stringify(dues));
-newTransaction.dueid = dueid;
-}
+  dateInput.value = "";
+  amountInput.value = "";
+  typeInput.value = "";
 
-
-transactions.push (newTransaction)
-
-localStorage.setItem("transactions", JSON.stringify(transactions))
-
-dateInput.value = "";
-amountInput.value = "";
-typeInput.value = "";
-
-renderDashboard();
-
-
+  renderDashboard();
 }
 
 
+// accounts
 
 
+function genAccId (){
+  const nextNumber = accounts.length + 1;
+  return 'D' + String(nextNumber).padStart(2, '0');
+}
 
+
+// find account 
+
+function findAccountId(value) {
+  return accounts.find(acc =>
+    acc.id === value ||
+    acc.phone === value ||
+    acc.name.toLowerCase() === value.toLowerCase()
+  );
+}
+
+// create acc
+
+function createAcc ( name, phone){
+  
+   if(!name || !phone){
+    showtoast ("Please fill all the field", "error")
+    return;
+  }
+  
+  const exists = accounts.find (acc => acc.phone === phone)
+  if (exists) {
+    showtoast ("Account  phone number already exists", "error")
+ return;
+ 
+  } 
+  
+ 
+    
+    
+
+const NewAcc = {
+  id: genAccId(),
+  name,
+  phone,
+  balance: 0,
+  transactions: [],
+  createdAt: new Date().toISOString().split("T")[0]
+}
+
+accounts.push(NewAcc);
+localStorage.setItem("accounts", JSON.stringify(accounts));
+
+showtoast ("Account created successfully", "success")
+
+
+}
+
+
+saveAccBtn.addEventListener("click", () => {
+ createAcc ( accName.value.trim(), accPhone.value.trim());
+ accName.value = "";
+ accPhone.value = "";
+ 
+})
 
 // Events
 filterType.addEventListener("change", renderDashboard);
