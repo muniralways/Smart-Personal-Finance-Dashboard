@@ -954,6 +954,61 @@ showtoast ("Account created successfully", "success")
 }
 
 
+
+// pay
+
+function pay(accId, amount, date){
+
+  const account = accounts.find( acc => String(acc.id) === String(accId));
+
+  if(!account ) {
+     showtoast ("account not found", "error");
+      return;
+  }
+
+  if(  amount > account.balance ) {
+      showtoast ( `Over pay not allowed. Due amount is ${account.balance}`, "error");
+      return;
+
+  }
+  account.balance -= amount;
+
+  account.transactions.push({
+    id: 'pay' + Date.now() + Math.random().toString(36).slice(2),
+    date,
+    amount,
+    type: "payment"
+  })
+
+
+//  transactions.push({
+//     id: 'tr' + Date.now(),
+//     date,
+//     amount,
+//     type: "expense",
+//     paymentType: "pay",
+//     accountId: accId
+//   });
+
+  localStorage.setItem("accounts", JSON.stringify(accounts));
+  // localStorage.setItem("transactions", JSON.stringify(transactions));
+
+
+  renderDashboard();
+
+
+  showtoast ("Payment successful", "success");
+
+}
+
+
+
+
+
+
+
+
+
 saveAccBtn.addEventListener("click", () => {
  createAcc ( accName.value.trim(), accPhone.value.trim());
  accName.value = "";
