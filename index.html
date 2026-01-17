@@ -21,6 +21,11 @@
     <h4 class="text-center mb-4"> Finance</h4>
     <ul class="nav flex-column gap-2">
       <li class="nav-item"><a href="#" class="nav-link active" data-section="dashboardSection">📊 Dashboard</a></li>
+      <li class="nav-item">
+    <a href="#" class="nav-link" data-section="accountsSection">
+      📒 Accounts
+    </a>
+  </li>
       <li class="nav-item"><a href="#" class="nav-link" data-section="transactionsSection">💳 Transactions</a></li>
       <li class="nav-item"><a href="#" class="nav-link" data-section="categorySummarySection">🗂 Category Summary</a></li>
     </ul>
@@ -71,6 +76,72 @@
         </div>
       </div>
     </div>
+<!-- ACCOUNTS SECTION -->
+<div id="accountsSection" class="d-none">
+
+  <div class="row">
+    <!-- Account List -->
+    <div class="col-md-4">
+      <div class="card card-box p-3">
+        <h5>Accounts</h5>
+        <ul id="accountList" class="list-group mt-2"></ul>
+      </div>
+    </div>
+
+    <!-- Ledger -->
+    <div class="col-md-8">
+      <div id="ledgerSection" class="card card-box p-3 d-none">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h5 id="ledgerName"></h5>
+            <small>
+              ID: <span id="ledgerId"></span> |
+              Mobile: <span id="ledgerPhone"></span>
+            </small>
+          </div>
+
+          <button class="btn btn-success btn-sm paySection" onclick="openPayUI()">
+            Pay 
+           
+          </button>
+        </div>
+
+        <hr>
+
+        <h6>
+          Balance: <span id="ledgerBalance">0</span> ৳
+        </h6>
+
+        <table class="table table-bordered table-sm mt-2">
+          <thead class="table-dark">
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Debit</th>
+              <th>Credit</th>
+              <th>Balance</th>
+            </tr>
+          </thead>
+          <tbody id="ledgerTableBody"></tbody>
+        </table>
+
+      </div>
+
+      <!-- Pay UI -->
+      <div id="paySection" class="card card-box p-3 mt-3 d-none">
+        <h6>Pay Amount</h6>
+
+        <input type="date" id="payDate" class="form-control mb-2">
+        <input type="number" id="payAmount" class="form-control mb-2" placeholder="Amount">
+
+        <button class="btn btn-primary btn-sm" >Submit</button>
+        <button class="btn btn-secondary btn-sm" >Cancel</button>
+      </div>
+
+    </div>
+  </div>
+</div>
 
     <!-- transaction -->
     <div id="transactionsSection" class="d-none">

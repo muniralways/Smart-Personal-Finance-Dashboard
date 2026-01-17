@@ -1,3 +1,5 @@
+
+
 //get data from local storage
 let category = JSON.parse(localStorage.getItem("category")) || [ ];
 let transactions = JSON.parse(localStorage.getItem("transactions")) || [] ;
@@ -80,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
   getCategory();
   randercategory();
   renderDashboard();
-
+renderaccList()
 });
 
 // tost function
@@ -981,17 +983,17 @@ function pay(accId, amount, date){
   })
 
 
-//  transactions.push({
-//     id: 'tr' + Date.now(),
-//     date,
-//     amount,
-//     type: "expense",
-//     paymentType: "pay",
-//     accountId: accId
-//   });
+ transactions.push({
+    id: 'tr' + Date.now(),
+    date,
+    amount,
+    type: "expense",
+    paymentType: "pay",
+    accountId: accId
+  });
 
   localStorage.setItem("accounts", JSON.stringify(accounts));
-  // localStorage.setItem("transactions", JSON.stringify(transactions));
+  localStorage.setItem("transactions", JSON.stringify(transactions));
 
 
   renderDashboard();
@@ -1001,10 +1003,96 @@ function pay(accId, amount, date){
 
 }
 
+renderaccList()
 
+// ac show ui
+function renderaccList() {
+  const list = document.getElementById("accountList");
+  list.innerHTML = "";
 
+  accounts.forEach(acc => {
+    const li = document.createElement("li");
+    li.className = "list-group-item d-flex justify-content-between align-items-center";
 
+    li.innerHTML = `
+      <div>
+        <strong>${acc.name}</strong><br>
+        <small>${acc.id} | ${acc.phone}</small>
+      </div>
+      <button class="btn btn-sm btn-outline-primary">View</button>
+    `;
 
+    li.querySelector("button").onclick = () => openLedger(acc.id);
+    list.appendChild(li);
+  });
+}
+
+// activ account
+let activeAccountId = null;
+
+// ope ledger
+function openLedger(accountId) {
+  activeAccountId = accountId;
+
+  const acc = accounts.find(a => a.id === accountId);
+  if (!acc) return;
+
+  document.getElementById("ledgerSection").classList.remove("d-none");
+  document.getElementById("paySection").classList.add("d-none");
+
+  document.getElementById("ledgerName").textContent = acc.name;
+  document.getElementById("ledgerId").textContent = acc.id;
+  document.getElementById("ledgerPhone").textContent = acc.phone;
+
+  renderLedger(accountId);
+}
+
+// ledger 
+function renderLedger(accountId) {
+
+  const tbody = document.getElementById("ledgerTableBody");
+  tbody.innerHTML = "";
+
+  const acc = accounts.find(a => a.id === accountId);
+  if (!acc) return;
+
+  let balance = 0;
+
+  const accTransactions = transactions
+    .filter(tr => tr.accountId === accountId)
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  accTransactions.forEach(tr => {
+
+    let debit = "";
+    let credit = "";
+
+    if (tr.paymentType === "due") {
+      balance += tr.amount;
+      debit = tr.amount;
+    }
+
+    if (tr.paymentType === "pay") {
+      balance -= tr.amount;
+      credit = tr.amount;
+    }
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${tr.date}</td>
+      <td>${tr.paymentType}</td>
+      <td>${debit}</td>
+      <td>${credit}</td>
+      <td>${balance}</td>
+    `;
+
+    tbody.appendChild(row);
+   
+    
+  });
+
+  document.getElementById("ledgerBalance").textContent = balance;
+}
 
 
 
