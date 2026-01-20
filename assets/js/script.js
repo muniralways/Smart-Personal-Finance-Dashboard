@@ -528,6 +528,7 @@ data = [...data].reverse()
 
   getCategory();
   randercategory();
+  renderaccList()
 
 
 
@@ -784,12 +785,7 @@ function getCategory () {
   });
 }
 
-// pay type fun
 
-function paymentType (){
-  const paymentType = paymentTypeInput.value;
-
-}
 
 
 
@@ -899,6 +895,7 @@ console.log(accountVal);
   typeInput.value = "";
 
   renderDashboard();
+  renderaccList()
 }
 
 
@@ -1000,7 +997,7 @@ function pay(accId, amount, date){
 
 
   renderDashboard();
-
+renderaccList()
 
   showtoast ("Payment successful", "success");
 
@@ -1049,7 +1046,7 @@ activeAccountId = accountId;
 
 
   document.getElementById("ledgerSection").classList.remove("d-none");
-  document.getElementById("paySection").classList.add("d-none");
+
 
   document.getElementById("ledgerName").textContent = acc.name;
   document.getElementById("ledgerId").textContent = acc.id;
@@ -1067,7 +1064,7 @@ function renderLedger(accountId) {
   const acc = accounts.find(a => a.id === accountId);
   if (!acc) return;
 
-  let balance = 0;
+  let balance = 0; 
 
   const accTransactions = transactions
     .filter(tr => tr.accountId === accountId)
@@ -1078,11 +1075,13 @@ function renderLedger(accountId) {
     let debit = "";
     let credit = "";
 
+    
     if (tr.paymentType === "due") {
       balance += tr.amount;
       debit = tr.amount;
     }
 
+   
     if (tr.paymentType === "pay") {
       balance -= tr.amount;
       credit = tr.amount;
@@ -1091,32 +1090,28 @@ function renderLedger(accountId) {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${tr.date}</td>
-      <td>${tr.paymentType}</td>
+      <td>${tr.paymentType === "due" ? "Due" : "Payment"}</td>
       <td>${debit}</td>
       <td>${credit}</td>
       <td>${balance}</td>
     `;
 
     tbody.appendChild(row);
-   
-      
   });
 
-
-
+ 
   document.getElementById("ledgerBalance").textContent = balance;
 }
+
 
 function openPayUI() {
   if (!activeAccountId) return;
 
   document.getElementById('showDid').textContent = activeAccountId;
 
-  // Reset input fields
-  document.getElementById("payAmount").value = "";
-  document.getElementById("payDate").value = "";
+ 
 
-  // Open modal safely using bootstrap Modal instance
+  
  
 }
 

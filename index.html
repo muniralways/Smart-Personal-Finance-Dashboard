@@ -101,7 +101,7 @@
             </small>
           </div>
 
-          <button class="btn btn-success btn-sm paySection"  onclick="openPayUI()">
+          <button class="btn btn-success btn-sm paySection" data-bs-toggle="modal" data-bs-target="#payModal" onclick="openPayUI()">
             Pay 
            
           </button>
@@ -128,17 +128,7 @@
 
       </div>
 
-      <!-- Pay UI -->
-      <div id="paySection" class="card card-box p-3 mt-3 d-none">
-        <h6>Pay Amount</h6>
-
-        <input type="date" id="payDate" class="form-control mb-2">
-        <input type="number" id="payAmount" class="form-control mb-2" placeholder="Amount">
-
-        <button class="btn btn-primary btn-sm" >Submit</button>
-        <button class="btn btn-secondary btn-sm" >Cancel</button>
-      </div>
-
+      
     </div>
   </div>
 </div>
