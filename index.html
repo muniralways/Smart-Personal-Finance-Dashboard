@@ -101,7 +101,7 @@
             </small>
           </div>
 
-          <button class="btn btn-success btn-sm paySection" onclick="openPayUI()">
+          <button class="btn btn-success btn-sm paySection"  onclick="openPayUI()">
             Pay 
            
           </button>
@@ -310,6 +310,33 @@
     </div>
   </div>
 </div>
+
+<!-- pay modal -->
+
+<div class="modal fade" id="payModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Pay</h5>
+      </div>
+      <div class="modal-body">
+        <p>Pay to Account ID: <span id="showDid"></span></p>
+        <div class="mb-3">
+          <label>Amount</label>
+          <input type="number" id="payAmount" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label>Date</label>
+          <input type="date" id="payDate" class="form-control" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="confirmPayBtn">Confirm Pay</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- category Modal -->
 <div class="modal fade" id="gategoryModal" tabindex="-1">

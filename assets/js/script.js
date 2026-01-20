@@ -497,10 +497,13 @@ function renderDashboard() {
   let data = filterByType(transactions, type);
   data = filterByMonth(data, month);
   
-  data = data.filter(tr =>
-    tr.date.toLowerCase().includes(search) ||
-    tr.type.toLowerCase().includes(search) 
-  )
+data = data.filter(tr =>
+  String(tr.date || "").toLowerCase().includes(search) ||
+  String(tr.type || "").toLowerCase().includes(search) ||
+  String(tr.gategory || "").toLowerCase().includes(search)
+);
+
+
   //sort
 data= sortByAmount(data, sortAmount);
 
@@ -1024,18 +1027,26 @@ function renderaccList() {
 
     li.querySelector("button").onclick = () => openLedger(acc.id);
     list.appendChild(li);
+     
   });
+ 
 }
 
 // activ account
 let activeAccountId = null;
 
+console.log(activeAccountId);
+
+
 // ope ledger
 function openLedger(accountId) {
-  activeAccountId = accountId;
+ 
+activeAccountId = accountId;
 
   const acc = accounts.find(a => a.id === accountId);
   if (!acc) return;
+
+
 
   document.getElementById("ledgerSection").classList.remove("d-none");
   document.getElementById("paySection").classList.add("d-none");
@@ -1088,11 +1099,55 @@ function renderLedger(accountId) {
 
     tbody.appendChild(row);
    
-    
+      
   });
+
+
 
   document.getElementById("ledgerBalance").textContent = balance;
 }
+
+function openPayUI() {
+  if (!activeAccountId) return;
+
+  document.getElementById('showDid').textContent = activeAccountId;
+
+  // Reset input fields
+  document.getElementById("payAmount").value = "";
+  document.getElementById("payDate").value = "";
+
+  // Open modal safely using bootstrap Modal instance
+ 
+}
+
+// confirm    pay button
+
+
+
+const confirmPayBtn = document.getElementById("confirmPayBtn");
+
+function payConfirm() {
+  const amount = Number(document.getElementById("payAmount").value);
+  const date = document.getElementById("payDate").value;
+
+  console.log(amount, date); 
+
+  if (!amount || amount <= 0 || !date) {
+    showtoast("Please enter valid amount & date", "error");
+    return;
+  }
+
+  pay(activeAccountId, amount, date);
+  renderLedger(activeAccountId);
+
+  const modalEl = document.getElementById("payModal");
+  bootstrap.Modal.getInstance(modalEl).hide();
+}
+
+confirmPayBtn.addEventListener("click", payConfirm);
+
+
+
 
 
 
@@ -1103,6 +1158,8 @@ saveAccBtn.addEventListener("click", () => {
  accPhone.value = "";
  
 })
+
+
 
 // Events
 filterType.addEventListener("change", renderDashboard);
